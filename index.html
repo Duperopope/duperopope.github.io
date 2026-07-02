@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="fr">
+<!--
+  ============================================================================
+  ATELIER WEB — page de service de Samir Medjaher
+  ----------------------------------------------------------------------------
+  SÉCURITÉ / CONTACT :
+  - Aucune adresse email n'apparaît en clair sur cette page (anti-scraping).
+  - Le formulaire passe par Web3Forms (relais chiffré HTTPS). L'email de
+    destination est configuré CHEZ Web3Forms, pas dans ce code.
+
+  >>> AVANT PUBLICATION — 1 seule chose à faire : <<<
+  1. Va sur https://web3forms.com  → entre ton alias Gmail dédié comme
+     email de destination → tu reçois une "Access Key".
+  2. Colle cette clé plus bas à la place de :  6a658bee-9f03-4846-9185-0f2d16cf9835
+     (cherche "access_key" dans le fichier).
+  C'est tout. Les messages arriveront dans la boîte configurée.
+  ============================================================================
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atelier Web — Sites web faits main & sécurisés pour commerces · Rillieux & Lyon</title>
+<meta name="description" content="Samir Medjaher conçoit des sites web sur mesure, rapides et sécurisés pour les commerçants et artisans de Rillieux-la-Pape et de Lyon. Maquette gratuite, sans engagement. Formé en cybersécurité.">
+<meta name="theme-color" content="#141210">
+<meta property="og:title" content="Atelier Web — Sites faits main & sécurisés pour commerces locaux">
+<meta property="og:description" content="Des sites sur mesure pour les commerçants de Rillieux & Lyon. Maquette gratuite, sans engagement.">
+<meta property="og:type" content="website">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#141210;      /* fond encre chaude */
+    --ink2:#1E1A15;     /* surfaces relevées */
+    --ink3:#0F0D0A;     /* pied de page */
+    --paper:#ECE4D6;    /* texte principal */
+    --muted:#948A79;    /* texte secondaire */
+    --line:rgba(236,228,214,.10);
+    --line2:rgba(236,228,214,.18);
+    --gold:#D8A94B;     /* accent unique : laiton / sceau */
+    --gold-2:#E7C878;
+    --gold-soft:rgba(216,169,75,.12);
+    --wa:#25D366;
+  }
+  *{ -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility }
+  html{ scroll-behavior:smooth }
+  body{ font-family:'Instrument Sans',system-ui,sans-serif; color:var(--paper); background:var(--ink) }
+  .display{ font-family:'Bricolage Grotesque',sans-serif; letter-spacing:-.02em; line-height:1.02 }
+  .mono{ font-family:'Space Mono',ui-monospace,monospace }
+  .kicker{ font-family:'Space Mono',monospace; letter-spacing:.24em; text-transform:uppercase; font-size:.7rem; color:var(--gold) }
+  .txt-muted{ color:var(--muted) }
+  .accent{ color:var(--gold) }
+  .rule{ border-color:var(--line) }
+
+  /* fond hero : encre + halo doré derrière le sceau + grille très discrète */
+  .hero-bg{
+    background:
+      radial-gradient(120% 90% at 82% 30%, rgba(216,169,75,.10), transparent 55%),
+      radial-gradient(90% 70% at 0% 0%, rgba(216,169,75,.05), transparent 50%),
+      var(--ink);
+  }
+  .grid-faint{
+    background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:64px 64px;
+    -webkit-mask-image:radial-gradient(75% 75% at 50% 40%,#000,transparent 100%);
+            mask-image:radial-gradient(75% 75% at 50% 40%,#000,transparent 100%);
+  }
+
+  .lift{ transition:transform .28s ease, box-shadow .28s ease, border-color .28s ease }
+  .lift:hover{ transform:translateY(-5px); box-shadow:0 24px 50px rgba(0,0,0,.45); border-color:var(--line2) }
+
+  .btn-gold{ background:var(--gold); color:#231a06; box-shadow:0 10px 30px rgba(216,169,75,.20) }
+  .btn-gold:hover{ background:var(--gold-2) }
+  .btn-ghost{ border:1px solid var(--line2); color:var(--paper) }
+  .btn-ghost:hover{ background:var(--paper); color:var(--ink) }
+  .btn-wa{ background:var(--wa); color:#04310f }
+  .btn-wa:hover{ filter:brightness(1.06) }
+
+  /* focus clavier visible partout */
+  a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
+    outline:2px solid var(--gold); outline-offset:3px; border-radius:6px;
+  }
+
+  /* champs du formulaire */
+  .field{ background:var(--ink); border:1px solid var(--line2); color:var(--paper);
+          border-radius:12px; padding:.85rem 1rem; width:100%; transition:border-color .2s, background .2s }
+  .field::placeholder{ color:#6f6858 }
+  .field:focus{ border-color:var(--gold); background:#171310; outline:none }
+  .flabel{ font-family:'Space Mono',monospace; font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted) }
+
+  /* ---- LE CACHET (signature de la page) ---- */
+  .seal{ width:100%; height:auto; overflow:visible }
+  .seal .ring{ transform-origin:100px 100px; animation:sealspin 30s linear infinite }
+  .seal-ink{ stroke:var(--gold); }
+  .seal-txt{ fill:var(--gold); font-family:'Space Mono',monospace; font-size:9.1px; letter-spacing:2px }
+  .seal-mono{ fill:var(--paper); font-family:'Bricolage Grotesque',sans-serif; font-weight:800 }
+  .seal-sub{ fill:var(--gold); font-family:'Space Mono',monospace; font-size:6.4px; letter-spacing:3px }
+  @keyframes sealspin{ to{ transform:rotate(360deg) } }
+
+  .step-num{ font-family:'Bricolage Grotesque',sans-serif; font-weight:800; color:var(--gold-soft);
+             -webkit-text-stroke:1px var(--gold); color:transparent }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto }
+    .seal .ring{ animation:none }
+    .lift{ transition:none }
+  }
+</style>
+</head>
+<body class="antialiased">
+
+<a href="#contact" class="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-3 focus:left-3 focus:bg-[var(--gold)] focus:text-black focus:px-4 focus:py-2 focus:rounded-full focus:font-semibold">Aller au contact</a>
+
+<!-- WhatsApp flottant -->
+<a href="https://wa.me/33780757576?text=Bonjour%20Samir,%20je%20tiens%20un%20commerce%20et%20je%20voudrais%20une%20maquette%20de%20site"
+   target="_blank" rel="noopener" aria-label="Écrire sur WhatsApp"
+   class="btn-wa fixed right-5 bottom-5 z-[60] flex items-center gap-2 font-semibold pl-4 pr-5 py-3 rounded-full hover:scale-105 transition"
+   style="box-shadow:0 14px 34px rgba(0,0,0,.5)">
+   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.4 0 .5l-.4.6c-.2.2-.3.4-.1.7.2.3.9 1.4 1.9 2 .8.5 1.2.6 1.4.5.2-.1.4-.5.6-.7.2-.3.4-.2.6-.1l1.8.9c.2.1.4.2.4.3.1.2.1.6-.1 1.1Z"/></svg>
+   WhatsApp
+</a>
+
+<!-- NAV -->
+<header class="sticky top-0 z-50 border-b rule backdrop-blur" style="background:rgba(20,18,16,.72)">
+  <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    <a href="#" class="flex items-center gap-2.5">
+      <span class="grid place-items-center w-8 h-8 rounded-full border" style="border-color:var(--gold)">
+        <span class="display accent text-[15px] leading-none">SM</span>
+      </span>
+      <span class="mono text-[13px] tracking-widest uppercase txt-muted">Atelier&nbsp;Web</span>
+    </a>
+    <nav class="hidden md:flex items-center gap-9 mono text-[12px] tracking-widest uppercase txt-muted">
+      <a href="#offres" class="hover:text-[var(--paper)] transition">Formules</a>
+      <a href="#methode" class="hover:text-[var(--paper)] transition">Méthode</a>
+      <a href="#realisations" class="hover:text-[var(--paper)] transition">Réalisations</a>
+    </nav>
+    <a href="#contact" class="btn-gold text-sm font-semibold px-4 py-2 rounded-full">Maquette gratuite</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero-bg relative overflow-hidden border-b rule">
+  <div class="absolute inset-0 grid-faint pointer-events-none" aria-hidden="true"></div>
+  <div class="relative max-w-6xl mx-auto px-6 pt-20 pb-24 md:pt-28 md:pb-32 grid md:grid-cols-[1.15fr_.85fr] gap-14 items-center">
+    <div>
+      <p class="kicker mb-6">Atelier web — Rillieux-la-Pape &amp; Lyon</p>
+      <h1 class="display text-[2.7rem] sm:text-6xl md:text-[4.2rem] font-extrabold mb-7">
+        Le web de votre commerce,<br>
+        <span class="accent">fait main</span> et sous bonne garde.
+      </h1>
+      <p class="text-lg leading-relaxed txt-muted max-w-xl mb-9">
+        Je conçois des sites sur mesure pour les commerçants et artisans d'ici. Dessinés à la main,
+        rapides, mis en ligne — et sécurisés, parce que j'ai été formé pour ça. Vous tenez votre boutique,
+        je tiens votre présence en ligne.
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <a href="https://wa.me/33780757576?text=Bonjour%20Samir,%20je%20voudrais%20une%20maquette%20gratuite%20pour%20mon%20commerce"
+           target="_blank" rel="noopener"
+           class="btn-wa flex items-center gap-2 font-semibold px-6 py-3.5 rounded-full">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.4 0 .5l-.4.6c-.2.2-.3.4-.1.7.2.3.9 1.4 1.9 2 .8.5 1.2.6 1.4.5.2-.1.4-.5.6-.7.2-.3.4-.2.6-.1l1.8.9c.2.1.4.2.4.3.1.2.1.6-.1 1.1Z"/></svg>
+          Demander ma maquette
+        </a>
+        <a href="#realisations" class="btn-ghost font-semibold px-6 py-3.5 rounded-full transition">Voir les réalisations</a>
+      </div>
+      <p class="mono text-[11px] tracking-[.18em] uppercase txt-muted mt-7">
+        Gratuit &amp; sans engagement — vous voyez avant de décider.
+      </p>
+    </div>
+
+    <!-- LE CACHET -->
+    <div class="justify-self-center w-[260px] sm:w-[320px] md:w-full max-w-[380px]" aria-hidden="true">
+      <svg class="seal" viewBox="0 0 200 200" role="img" aria-label="Cachet de l'atelier : fait main et sécurisé">
+        <defs>
+          <path id="sealArc" d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0"/>
+        </defs>
+        <circle class="seal-ink" cx="100" cy="100" r="88" fill="none" stroke-width="1" opacity=".5"/>
+        <g class="ring">
+          <circle class="seal-ink" cx="100" cy="100" r="83" fill="none" stroke-width="1.4"/>
+          <circle class="seal-ink" cx="100" cy="100" r="63" fill="none" stroke-width="1" opacity=".55"/>
+          <text class="seal-txt">
+            <textPath href="#sealArc" startOffset="0">FAIT&#160;MAIN&#160;·&#160;SÉCURISÉ&#160;·&#160;RILLIEUX-LA-PAPE&#160;·&#160;SUR&#160;MESURE&#160;·&#160;</textPath>
+          </text>
+        </g>
+        <!-- centre fixe -->
+        <text class="seal-mono" x="100" y="102" text-anchor="middle" font-size="40">SM</text>
+        <text class="seal-sub" x="100" y="122" text-anchor="middle">EST. 2024</text>
+        <line class="seal-ink" x1="70" y1="130" x2="130" y2="130" stroke-width="1" opacity=".4"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- bandeau confiance -->
+  <div class="relative border-t rule">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex flex-wrap gap-x-8 gap-y-2 justify-center md:justify-between mono text-[11px] tracking-[.16em] uppercase txt-muted">
+      <span><span class="accent">✦</span> Maquette gratuite</span>
+      <span><span class="accent">✦</span> 0 engagement</span>
+      <span><span class="accent">✦</span> Formé en cybersécurité</span>
+      <span><span class="accent">✦</span> Un seul interlocuteur</span>
+    </div>
+  </div>
+</section>
+
+<!-- OFFRES -->
+<section id="offres" class="py-24 md:py-28">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-14">
+      <div>
+        <p class="kicker mb-3">Les formules</p>
+        <h2 class="display text-4xl md:text-5xl font-bold">Trois formules, aucune surprise.</h2>
+      </div>
+      <p class="txt-muted max-w-sm md:text-right">Des prix clairs, annoncés d'avance. Pas de jargon, pas de devis à rallonge.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <!-- vitrine -->
+      <div class="lift rounded-2xl p-8 border rule" style="background:var(--ink2)">
+        <p class="mono text-[11px] tracking-[.18em] uppercase txt-muted mb-4">Site vitrine</p>
+        <div class="display text-4xl font-extrabold mb-1">490&nbsp;€</div>
+        <p class="txt-muted text-sm mb-6">Une page, tout ce qu'il faut.</p>
+        <ul class="space-y-2.5 text-[15px]">
+          <li class="flex gap-2.5"><span class="accent">—</span> Un site élégant, parfait sur téléphone comme sur ordinateur</li>
+          <li class="flex gap-2.5"><span class="accent">—</span> Vos clients vous appellent ou vous écrivent en un clic</li>
+          <li class="flex gap-2.5"><span class="accent">—</span> Vos prestations, vos avis, vos horaires</li>
+          <li class="flex gap-2.5"><span class="accent">—</span> Mis en ligne et sécurisé — tout compris</li>
+        </ul>
+      </div>
+      <!-- reco -->
+      <div class="lift rounded-2xl p-8 relative" style="background:linear-gradient(180deg,#241d12,#1b1610); border:1.5px solid var(--gold)">
+        <span class="absolute -top-3 left-8 btn-gold text-[11px] font-semibold px-3 py-1 rounded-full mono tracking-wider uppercase">Le plus pris</span>
+        <p class="mono text-[11px] tracking-[.18em] uppercase accent mb-4">Site + réservation</p>
+        <div class="display text-4xl font-extrabold mb-1">690&nbsp;€</div>
+        <p class="txt-muted text-sm mb-6">Le site qui remplit l'agenda.</p>
+        <ul class="space-y-2.5 text-[15px]">
+          <li class="flex gap-2.5"><span class="accent">—</span> Tout ce qu'il y a dans la formule vitrine</li>
+          <li class="flex gap-2.5"><span class="accent">—</span> Vos clients réservent leur créneau en ligne</li>
+          <li class="flex gap-2.5"><span class="accent">—</span> Les rendez-vous arrivent direct dans votre agenda</li>
+          <li class="flex gap-2.5"><span class="accent">—</span> Idéal coiffeurs, restaurants, instituts</li>
+        </ul>
+      </div>
+      <!-- suivi -->
+      <div class="lift rounded-2xl p-8 border rule" style="background:var(--ink2)">
+        <p class="mono text-[11px] tracking-[.18em] uppercase txt-muted mb-4">Suivi &amp; sérénité</p>
+        <div class="display text-4xl font-extrabold mb-1">19&nbsp;€<span class="text-base txt-muted font-normal">/mois</span></div>
+        <p class="txt-muted text-sm mb-6">On s'occupe de tout, après.</p>
+        <ul class="space-y-2.5 text-[15px]">
+          <li class="flex gap-2.5"><span class="accent">—</span> Votre site toujours en ligne, sauvegardé</li>
+          <li class="flex gap-2.5"><span class="accent">—</span> Petites modifs quand vous voulez</li>
+          <li class="flex gap-2.5"><span class="accent">—</span> Protégé et à jour en permanence</li>
+          <li class="flex gap-2.5"><span class="accent">—</span> Toujours la même personne pour vous</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METHODE (vraie séquence 01 → 04) -->
+<section id="methode" class="py-24 md:py-28 border-y rule" style="background:var(--ink3)">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="mb-14 max-w-2xl">
+      <p class="kicker mb-3">La méthode</p>
+      <h2 class="display text-4xl md:text-5xl font-bold mb-4">De la première idée à un site en ligne.</h2>
+      <p class="txt-muted">Quatre étapes, dans cet ordre. Vous ne payez qu'une fois la maquette validée.</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
+      <div>
+        <div class="step-num display text-6xl mb-4">01</div>
+        <h3 class="display text-xl font-bold mb-2">On échange</h3>
+        <p class="txt-muted text-[15px]">Un message sur WhatsApp, 5 minutes. Vous me parlez de votre commerce, je pose deux-trois questions.</p>
+      </div>
+      <div>
+        <div class="step-num display text-6xl mb-4">02</div>
+        <h3 class="display text-xl font-bold mb-2">Je crée la maquette</h3>
+        <p class="txt-muted text-[15px]">Gratuitement. Vous voyez votre futur site en vrai, avant de décider quoi que ce soit.</p>
+      </div>
+      <div>
+        <div class="step-num display text-6xl mb-4">03</div>
+        <h3 class="display text-xl font-bold mb-2">Mise en ligne &amp; sécurité</h3>
+        <p class="txt-muted text-[15px]">On valide, je publie : nom de domaine, HTTPS, sauvegardes. Verrouillé dès le premier jour.</p>
+      </div>
+      <div>
+        <div class="step-num display text-6xl mb-4">04</div>
+        <h3 class="display text-xl font-bold mb-2">Je reste là</h3>
+        <p class="txt-muted text-[15px]">Une modif, une question, une mise à jour ? Vous m'écrivez, je m'en occupe. Toujours le même interlocuteur.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POURQUOI / SÉCURITÉ -->
+<section class="py-24 md:py-28">
+  <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+    <div>
+      <p class="kicker mb-3">Pourquoi moi</p>
+      <h2 class="display text-4xl md:text-5xl font-bold mb-6">Un artisan, pas une agence.</h2>
+      <p class="txt-muted text-lg leading-relaxed mb-5">
+        Pas de standard téléphonique, pas de commercial, pas de sous-traitance à l'autre bout du monde.
+        Vous parlez directement à la personne qui dessine et code votre site — moi.
+      </p>
+      <p class="txt-muted text-lg leading-relaxed">
+        Je suis à Rillieux-la-Pape. On peut se voir autour d'un café, ou tout faire par message. À vous de choisir.
+      </p>
+    </div>
+    <div class="rounded-2xl p-8 md:p-10 border rule" style="background:var(--ink2)">
+      <div class="flex items-center gap-3 mb-6">
+        <span class="grid place-items-center w-11 h-11 rounded-full" style="background:var(--gold-soft);border:1px solid var(--gold)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        </span>
+        <div>
+          <h3 class="display text-xl font-bold">La sécurité, c'est mon métier</h3>
+          <p class="mono text-[11px] tracking-[.14em] uppercase txt-muted mt-0.5">Formé en cybersécurité</p>
+        </div>
+      </div>
+      <ul class="space-y-3.5 text-[15px]">
+        <li class="flex gap-3"><span class="accent mono">✓</span> Votre site protégé (le petit cadenas 🔒) dès le premier jour.</li>
+        <li class="flex gap-3"><span class="accent mono">✓</span> Sauvegardes régulières — rien ne se perd.</li>
+        <li class="flex gap-3"><span class="accent mono">✓</span> Les données de vos clients protégées, pas revendues.</li>
+        <li class="flex gap-3"><span class="accent mono">✓</span> Même ce formulaire ne laisse aucune adresse exposée.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- REALISATIONS -->
+<section id="realisations" class="py-24 md:py-28 border-y rule" style="background:var(--ink3)">
+  <div class="max-w-6xl mx-auto px-6">
+    <p class="kicker mb-3">Réalisations</p>
+    <h2 class="display text-4xl md:text-5xl font-bold mb-14">Du concret, déjà en ligne.</h2>
+    <div class="grid md:grid-cols-2 gap-6">
+      <a href="https://constructioncomores.com" target="_blank" rel="noopener"
+         class="lift group block rounded-2xl border rule overflow-hidden" style="background:var(--ink2)">
+        <div class="flex items-center gap-2 px-4 h-9 border-b rule" style="background:#0c0a08">
+          <span class="flex gap-1.5" aria-hidden="true">
+            <span class="w-2.5 h-2.5 rounded-full" style="background:#e0685a"></span>
+            <span class="w-2.5 h-2.5 rounded-full" style="background:#e0b64a"></span>
+            <span class="w-2.5 h-2.5 rounded-full" style="background:#5ac079"></span>
+          </span>
+          <span class="mx-auto mono text-[10px] tracking-wide txt-muted truncate">constructioncomores.com</span>
+        </div>
+        <div class="relative overflow-hidden" style="height:230px;background:#0c0a08">
+          <iframe src="https://constructioncomores.com" title="Aperçu live de constructioncomores.com" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"
+            style="position:absolute;top:0;left:0;width:250%;height:1000px;border:0;transform:scale(.4);transform-origin:top left;pointer-events:none"></iframe>
+          <div class="absolute inset-0 flex items-end p-4 opacity-0 group-hover:opacity-100 transition" style="background:linear-gradient(to top,rgba(12,10,8,.9),transparent 55%)">
+            <span class="mono text-xs accent">Voir le site en ligne →</span>
+          </div>
+        </div>
+        <div class="p-6 flex items-start justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <h3 class="display text-lg font-bold">constructioncomores.com</h3>
+              <span class="mono text-[10px] tracking-wider uppercase px-2 py-0.5 rounded-full" style="background:var(--gold-soft);color:var(--gold)">En prod</span>
+            </div>
+            <p class="txt-muted text-sm">Site professionnel pour un service de gestion de chantiers. En ligne et en production.</p>
+          </div>
+          <span class="accent text-xl transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
+        </div>
+      </a>
+      <a href="https://duperopope.github.io/paradis-de-la-coiffure/" target="_blank" rel="noopener"
+         class="lift group block rounded-2xl border rule overflow-hidden" style="background:var(--ink2)">
+        <div class="flex items-center gap-2 px-4 h-9 border-b rule" style="background:#0c0a08">
+          <span class="flex gap-1.5" aria-hidden="true">
+            <span class="w-2.5 h-2.5 rounded-full" style="background:#e0685a"></span>
+            <span class="w-2.5 h-2.5 rounded-full" style="background:#e0b64a"></span>
+            <span class="w-2.5 h-2.5 rounded-full" style="background:#5ac079"></span>
+          </span>
+          <span class="mx-auto mono text-[10px] tracking-wide txt-muted truncate max-w-[80%]">duperopope.github.io/paradis-de-la-coiffure</span>
+        </div>
+        <div class="relative overflow-hidden" style="height:230px;background:#0c0a08">
+          <iframe src="https://duperopope.github.io/paradis-de-la-coiffure/" title="Aperçu live de la démo salon" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"
+            style="position:absolute;top:0;left:0;width:250%;height:1000px;border:0;transform:scale(.4);transform-origin:top left;pointer-events:none"></iframe>
+          <div class="absolute inset-0 flex items-end p-4 opacity-0 group-hover:opacity-100 transition" style="background:linear-gradient(to top,rgba(12,10,8,.9),transparent 55%)">
+            <span class="mono text-xs accent">Voir la démo en ligne →</span>
+          </div>
+        </div>
+        <div class="p-6 flex items-start justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <h3 class="display text-lg font-bold">Site vitrine pour salon</h3>
+              <span class="mono text-[10px] tracking-wider uppercase px-2 py-0.5 rounded-full" style="background:rgba(236,228,214,.08);color:var(--muted)">Démo live</span>
+            </div>
+            <p class="txt-muted text-sm">Maquette éditoriale avec réservation WhatsApp, pensée pour les commerces locaux.</p>
+          </div>
+          <span class="accent text-xl transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT + FORMULAIRE -->
+<section id="contact" class="py-24 md:py-28">
+  <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-[.9fr_1.1fr] gap-14">
+    <div>
+      <p class="kicker mb-3">Parlons-en</p>
+      <h2 class="display text-4xl md:text-5xl font-bold mb-6">Votre maquette,<br>gratuite et sans suite obligée.</h2>
+      <p class="txt-muted text-lg leading-relaxed mb-8">
+        Dites-moi juste qui vous êtes et ce que vous vendez. Je reviens vers vous avec une première idée de site —
+        et si ça ne vous plaît pas, vous ne devez rien.
+      </p>
+      <div class="space-y-4">
+        <a href="https://wa.me/33780757576?text=Bonjour%20Samir,%20je%20voudrais%20une%20maquette%20gratuite%20pour%20mon%20commerce"
+           target="_blank" rel="noopener"
+           class="btn-wa inline-flex items-center gap-2 font-semibold px-6 py-3.5 rounded-full">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.4 0 .5l-.4.6c-.2.2-.3.4-.1.7.2.3.9 1.4 1.9 2 .8.5 1.2.6 1.4.5.2-.1.4-.5.6-.7.2-.3.4-.2.6-.1l1.8.9c.2.1.4.2.4.3.1.2.1.6-.1 1.1Z"/></svg>
+          Le plus rapide : WhatsApp
+        </a>
+        <p class="mono text-[11px] tracking-[.14em] uppercase txt-muted flex items-center gap-2">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          Échange chiffré — aucune adresse email exposée sur cette page.
+        </p>
+      </div>
+    </div>
+
+    <!-- Formulaire Web3Forms (aucun email en clair) -->
+    <div class="rounded-2xl p-7 md:p-9 border rule" style="background:var(--ink2)">
+      <form id="contactForm" action="https://api.web3forms.com/submit" method="POST" class="space-y-5">
+        <!-- >>> COLLE TA CLÉ WEB3FORMS ICI (voir instructions en haut du fichier) <<< -->
+        <input type="hidden" name="access_key" value="6a658bee-9f03-4846-9185-0f2d16cf9835">
+        <input type="hidden" name="subject" value="Nouveau contact depuis l'Atelier Web">
+        <input type="hidden" name="from_name" value="Site Atelier Web — Samir">
+        <!-- anti-spam (honeypot, invisible) -->
+        <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="display:none" aria-hidden="true">
+
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="flabel block mb-1.5" for="f-nom">Votre nom</label>
+            <input class="field" id="f-nom" name="nom" type="text" required placeholder="Prénom Nom">
+          </div>
+          <div>
+            <label class="flabel block mb-1.5" for="f-commerce">Votre commerce</label>
+            <input class="field" id="f-commerce" name="commerce" type="text" placeholder="Nom / type d'activité">
+          </div>
+        </div>
+        <div>
+          <label class="flabel block mb-1.5" for="f-contact">Comment vous joindre</label>
+          <input class="field" id="f-contact" name="contact" type="text" required placeholder="Téléphone ou email — comme vous préférez">
+        </div>
+        <div>
+          <label class="flabel block mb-1.5" for="f-message">Votre projet en deux mots</label>
+          <textarea class="field" id="f-message" name="message" rows="4" required placeholder="Ex : je tiens un salon à Rillieux, je voudrais un site avec les horaires et la prise de RDV."></textarea>
+        </div>
+
+        <button type="submit" id="submitBtn" class="btn-gold w-full font-semibold py-3.5 rounded-full transition">
+          Recevoir ma maquette gratuite
+        </button>
+
+        <p id="formStatus" class="text-sm text-center min-h-[1.2em]" role="status" aria-live="polite"></p>
+        <p class="mono text-[10px] tracking-[.12em] uppercase txt-muted text-center">
+          Envoi chiffré via HTTPS · vos infos ne servent qu'à vous répondre.
+        </p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- SIGNATURE / FOOTER -->
+<footer class="border-t rule py-14" style="background:var(--ink3)">
+  <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-8">
+    <div class="flex items-center gap-4">
+      <svg width="52" height="52" viewBox="0 0 200 200" aria-hidden="true">
+        <circle cx="100" cy="100" r="90" fill="none" stroke="var(--gold)" stroke-width="3" opacity=".7"/>
+        <circle cx="100" cy="100" r="72" fill="none" stroke="var(--gold)" stroke-width="2" opacity=".4"/>
+        <text x="100" y="118" text-anchor="middle" font-size="62" fill="var(--paper)" font-family="'Bricolage Grotesque',sans-serif" font-weight="800">SM</text>
+      </svg>
+      <div>
+        <div class="display text-lg font-bold">Samir Medjaher</div>
+        <div class="mono text-[11px] tracking-[.16em] uppercase txt-muted">Signé &amp; sécurisé · Rillieux-la-Pape</div>
+      </div>
+    </div>
+    <div class="text-center md:text-right">
+      <a href="#contact" class="accent mono text-[12px] tracking-widest uppercase hover:underline underline-offset-4">Demander une maquette →</a>
+      <p class="mono text-[11px] txt-muted mt-3">© 2026 Atelier Web — Création de sites · Rillieux &amp; Lyon</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Envoi AJAX Web3Forms : message inline, sans quitter la page.
+  // Si le JS échoue, le formulaire reste envoyable normalement (POST classique).
+  (function () {
+    var form = document.getElementById('contactForm');
+    var status = document.getElementById('formStatus');
+    var btn = document.getElementById('submitBtn');
+    if (!form) return;
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var key = form.querySelector('[name=access_key]').value;
+      if (key.indexOf('REMPLACER') === 0) {
+        status.style.color = 'var(--gold)';
+        status.textContent = "⚙︎ Formulaire pas encore activé — colle ta clé Web3Forms dans le code.";
+        return;
+      }
+      status.style.color = 'var(--muted)';
+      status.textContent = 'Envoi en cours…';
+      btn.disabled = true; btn.style.opacity = '.6';
+
+      fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } })
+        .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+        .then(function (res) {
+          if (res.ok) {
+            form.reset();
+            status.style.color = 'var(--gold-2)';
+            status.textContent = '✓ Message envoyé. Je reviens vers vous très vite, merci !';
+          } else {
+            status.style.color = '#e88';
+            status.textContent = "Envoi impossible pour le moment. Écrivez-moi plutôt sur WhatsApp ?";
+          }
+        })
+        .catch(function () {
+          status.style.color = '#e88';
+          status.textContent = "Pas de connexion ? Réessayez, ou passez par WhatsApp.";
+        })
+        .finally(function () { btn.disabled = false; btn.style.opacity = '1'; });
+    });
+  })();
+</script>
+</body>
+</html>
